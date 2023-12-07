@@ -1,12 +1,13 @@
-import { SignedIn, SignedOut, UserProfile } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
+import { NAV_BAR_LINKS } from "@/app/constants/navbar";
 
 const Navbar = () => {
   return (
-    <nav className="flex flex-row items-center justify-between py-3 md:px-6">
+    <nav className="mb-5 flex flex-row items-center justify-between border-b py-3 md:px-6">
       <Link href="/">
         <Image
           src={"/assets/images/smoothie.svg"}
@@ -21,7 +22,18 @@ const Navbar = () => {
         </Button>
       </SignedOut>
       <SignedIn>
-        <UserProfile />
+        <div className="flex items-center gap-6">
+          <ul className="flex gap-6">
+            {NAV_BAR_LINKS.map((link) => (
+              <li key={link.name}>
+                <Link className="hover:text-gray-400" href={link.path}>
+                  {link.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <UserButton afterSignOutUrl="/" />
+        </div>
       </SignedIn>
     </nav>
   );

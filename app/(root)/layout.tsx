@@ -5,7 +5,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Navbar />
-      <main className="mx-auto flex w-full flex-col md:w-4/5">{children}</main>
+      <main className="mx-auto flex w-full flex-col items-center md:w-4/5">
+        {children}
+      </main>
     </>
   );
 };
