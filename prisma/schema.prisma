@@ -1,0 +1,56 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int             @id @default(autoincrement())
+  firstName     String
+  lastName      String
+  email         String          @unique
+  clerk_id      String          @unique
+  votes         Smoothie[]
+  Smoothie_Vote Smoothie_Vote[]
+}
+
+model Smoothie {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  ingredients         Ingredient[]
+  votes               User[]
+  Smoothie_Ingredient Smoothie_Ingredient[]
+  Smoothie_Vote       Smoothie_Vote[]
+}
+
+model Ingredient {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  smoothies           Smoothie[]
+  Smoothie_Ingredient Smoothie_Ingredient[]
+}
+
+model Smoothie_Ingredient {
+  smoothie     Smoothie   @relation(fields: [smoothieId], references: [id])
+  smoothieId   Int
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId Int
+  amount       Float
+
+  @@id([smoothieId, ingredientId])
+}
+
+model Smoothie_Vote {
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  smoothie   Smoothie @relation(fields: [smoothieId], references: [id])
+  smoothieId Int
+  stars      Int
+
+  @@id([userId, smoothieId])
+}
