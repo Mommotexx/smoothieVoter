@@ -1,14 +1,21 @@
 import React from "react";
-import { currentUser } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
+import { getUserById } from "@/lib/actions/user.action";
 
 const page = async () => {
-  const user = await currentUser();
+  const { userId } = auth();
+
+  if (!userId) redirect("/sign-in");
+
+  const user = await getUserById({ userId });
+  console.log(user);
+
   return (
     <>
       <section className="flex w-full flex-col gap-3">
         <h1 className="text-center text-3xl">
-          Welcome to your dashboard{" "}
-          <span className="font-bold">{user?.firstName}</span>!
+          Welcome to your dashboard <span className="font-bold"></span>!
         </h1>
         <p className="text-xl">Please vote for your favorite smoothie:</p>
       </section>
