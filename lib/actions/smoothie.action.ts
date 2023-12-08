@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "../prisma";
+import { VoteSmoothie } from "./shared.types";
 
 export async function getSmoothies() {
   try {
@@ -12,9 +13,14 @@ export async function getSmoothies() {
             ingredient: true,
           },
         },
+        Smoothie_Vote: {
+          select: {
+            stars: true,
+          },
+        },
       },
     });
-
+    await prisma.$disconnect();
     return smoothies;
   } catch (error) {
     console.log(error);
@@ -44,7 +50,6 @@ export async function addSmoothie(params: any) {
 
     // Find ingredients or add if not exists
     for (const ingredient of ingredients) {
-      console.log(ingredient);
       const ingredientExists = await prisma.ingredient.findFirst({
         where: {
           name: ingredient,
@@ -52,7 +57,6 @@ export async function addSmoothie(params: any) {
       });
 
       if (!ingredientExists) {
-        console.log("Helloooo");
         const newIngredient = await prisma.ingredient.create({
           data: {
             name: ingredient,
@@ -69,7 +73,7 @@ export async function addSmoothie(params: any) {
       } else if (ingredientExists) {
         await prisma.smoothie_Ingredient.create({
           data: {
-            ingredientId: ingredientExists!.id,
+            ingredientId: ingredientExists.id,
             amount: 1,
             smoothieId: smoothie.id,
           },
@@ -79,6 +83,37 @@ export async function addSmoothie(params: any) {
 
     await prisma.$disconnect();
     return smoothie;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function voteSmoothie(params: VoteSmoothie) {
+  try {
+    const { smoothieId, userId, vote } = params;
+    const user = await prisma.user.findUnique({
+      where: {
+        clerkId: userId,
+      },
+    });
+    console.log(userId);
+    console.table(user);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const voteSmoothie = await prisma.smoothie_Vote.create({
+      data: {
+        smoothieId,
+        userId: user.id,
+        stars: vote,
+      },
+    });
+
+    await prisma.$disconnect();
+    return voteSmoothie;
   } catch (error) {
     console.log(error);
     throw error;

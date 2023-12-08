@@ -41,7 +41,7 @@ const SmoothieForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      ingredients: "mango, pineapple, strawberry",
+      ingredients: "",
     },
   });
 
@@ -76,7 +76,9 @@ const SmoothieForm = () => {
               <FormControl>
                 <Input placeholder="Mango, Pineapple, Strawberry" {...field} />
               </FormControl>
-              <FormDescription>This is the list of ingredients</FormDescription>
+              <FormDescription>
+                This is the list of ingredients. Separated by comma(,)
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

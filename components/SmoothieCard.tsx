@@ -1,13 +1,29 @@
 "use client";
+import { voteSmoothie } from "@/lib/actions/smoothie.action";
 import { Ingredient } from "@prisma/client";
 import React, { useState } from "react";
 
 interface SmoothieCardProps {
   title: string;
   ingredients: Partial<Ingredient>[] | any;
+  id: string;
+  userId: string;
+  stars?: any[];
 }
 
-const SmoothieCard = ({ title, ingredients }: SmoothieCardProps) => {
+const SmoothieCard = ({
+  title,
+  ingredients,
+  id,
+  userId,
+  stars,
+}: SmoothieCardProps) => {
+  let averageRating;
+  if (stars) {
+    const sumOfStars = stars?.reduce((acc, curr) => acc + curr.stars, 0);
+    averageRating = sumOfStars / stars?.length;
+  }
+
   const [hoveredStar, setHoveredStar] = useState<number>(0);
   const [selectedRating, setSelectedRating] = useState<number>(0);
 
@@ -15,12 +31,14 @@ const SmoothieCard = ({ title, ingredients }: SmoothieCardProps) => {
     setHoveredStar(rating);
   };
 
-  const handleStarClick = (rating: number) => {
+  const handleStarClick = async (rating: number) => {
     setSelectedRating(rating);
-    console.log("Rating selected: ", rating);
+    await voteSmoothie({
+      smoothieId: JSON.parse(id),
+      userId: JSON.parse(userId),
+      vote: rating,
+    });
   };
-
-  console.log(ingredients);
 
   return (
     <div className="flex w-full flex-col rounded-md p-6 outline md:w-fit">
@@ -50,6 +68,7 @@ const SmoothieCard = ({ title, ingredients }: SmoothieCardProps) => {
           </p>
         ))}
       </div>
+      {averageRating > 1 && <p>Average Rating: {averageRating?.toFixed(2)}</p>}
     </div>
   );
 };

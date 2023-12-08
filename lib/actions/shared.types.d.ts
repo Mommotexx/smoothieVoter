@@ -30,3 +30,9 @@ export interface AddSmoothieParams {
   name: string;
   ingredients: string[];
 }
+
+export interface VoteSmoothie {
+  smoothieId: number;
+  userId: string;
+  vote: number;
+}
