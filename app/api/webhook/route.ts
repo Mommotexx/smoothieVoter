@@ -63,7 +63,7 @@ export async function POST(req: Request) {
       clerkId: id,
       email: email_addresses[0].email_address,
       firstName: first_name,
-      lastName: last_name.length > 0 ? last_name : "",
+      lastName: last_name ?? "",
     });
 
     return NextResponse.json({ message: "OK", user: clerkUser });
@@ -75,7 +75,7 @@ export async function POST(req: Request) {
       updateData: {
         email: email_addresses[0].email_address,
         firstName: first_name,
-        lastName: last_name.length > 0 ? last_name : "",
+        lastName: last_name ?? "",
       },
       path: `/profile/${id}`,
     });

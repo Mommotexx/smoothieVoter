@@ -15,6 +15,7 @@ export async function getUserById(params: any) {
         clerkId: userId,
       },
     });
+    await prisma.$disconnect();
     return user;
   } catch (error) {
     console.log(error);
@@ -27,6 +28,7 @@ export async function createUser(userData: CreateUserParams) {
     const newUser = await prisma.user.create({
       data: userData,
     });
+    await prisma.$disconnect();
     return newUser;
   } catch (error) {
     console.log(error);
@@ -44,6 +46,7 @@ export async function updateUser(params: UpdateUserParams) {
       },
       data: updateData,
     });
+    await prisma.$disconnect();
     revalidatePath(path);
   } catch (error) {
     console.log(error);
@@ -64,18 +67,12 @@ export async function deleteUser(params: DeleteUserParams) {
       throw new Error("User not found");
     }
 
-    // Delete all smoothie votes for this user
-    await prisma.smoothie_Vote.deleteMany({
-      where: {
-        userId: user.id,
-      },
-    });
-
     await prisma.user.delete({
       where: {
         id: user.id,
       },
     });
+    await prisma.$disconnect();
   } catch (error) {
     console.log(error);
     throw error;

@@ -14,16 +14,16 @@ model User {
   firstName     String
   lastName      String
   email         String          @unique
-  clerkId      String          @unique
-  votes         Smoothie[]
+  clerkId       String          @unique
+  votes         Smoothie[]      @relation("Smoothie_Vote")
   Smoothie_Vote Smoothie_Vote[]
 }
 
 model Smoothie {
   id                  Int                   @id @default(autoincrement())
   name                String
-  ingredients         Ingredient[]
-  votes               User[]
+  ingredients         Ingredient[]          @relation("Smoothie_Ingredient")
+  votes               User[]                @relation("Smoothie_Vote")
   Smoothie_Ingredient Smoothie_Ingredient[]
   Smoothie_Vote       Smoothie_Vote[]
 }
@@ -31,26 +31,30 @@ model Smoothie {
 model Ingredient {
   id                  Int                   @id @default(autoincrement())
   name                String
-  smoothies           Smoothie[]
+  smoothies           Smoothie[]            @relation("Smoothie_Ingredient")
   Smoothie_Ingredient Smoothie_Ingredient[]
 }
 
 model Smoothie_Ingredient {
-  smoothie     Smoothie   @relation(fields: [smoothieId], references: [id])
-  smoothieId   Int
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
-  ingredientId Int
-  amount       Float
+  smoothieId   Int @map("smoothie_id")
+  ingredientId Int @map("ingredient_id")
+
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+  smoothie   Smoothie   @relation(fields: [smoothieId], references: [id])
+
+  amount Float
 
   @@id([smoothieId, ingredientId])
 }
 
 model Smoothie_Vote {
-  user       User     @relation(fields: [userId], references: [id])
-  userId     Int
-  smoothie   Smoothie @relation(fields: [smoothieId], references: [id])
-  smoothieId Int
-  stars      Int
+  userId     Int @map("user_id")
+  smoothieId Int @map("smoothie_id")
+
+  user     User     @relation(fields: [userId], references: [id])
+  smoothie Smoothie @relation(fields: [smoothieId], references: [id])
+
+  stars Int
 
   @@id([userId, smoothieId])
 }

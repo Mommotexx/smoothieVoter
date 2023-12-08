@@ -16,3 +16,17 @@ export interface UpdateUserParams {
 export interface DeleteUserParams {
   clerkId: string;
 }
+
+export interface SmoothieIngredientParams {
+  ingredientId: number;
+  amount: number;
+}
+
+export interface AddIngredient {
+  name: string;
+}
+
+export interface AddSmoothieParams {
+  name: string;
+  ingredients: string[];
+}
