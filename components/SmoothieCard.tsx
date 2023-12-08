@@ -24,8 +24,10 @@ const SmoothieCard = ({
     averageRating = sumOfStars / stars?.length;
   }
 
-  const [hoveredStar, setHoveredStar] = useState<number>(0);
-  const [selectedRating, setSelectedRating] = useState<number>(0);
+  const [hoveredStar, setHoveredStar] = useState<number>(averageRating ?? 0);
+  const [selectedRating, setSelectedRating] = useState<number>(
+    averageRating ?? 0
+  );
 
   const handleStarHover = (rating: number) => {
     setHoveredStar(rating);
@@ -68,7 +70,7 @@ const SmoothieCard = ({
           </p>
         ))}
       </div>
-      {averageRating > 1 && <p>Average Rating: {averageRating?.toFixed(2)}</p>}
+      {averageRating! > 1 && <p>Average Rating: {averageRating?.toFixed(2)}</p>}
     </div>
   );
 };
