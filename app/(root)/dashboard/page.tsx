@@ -1,15 +1,14 @@
 import React from "react";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import { getUserById } from "@/lib/actions/user.action";
+// import { getUserById } from "@/lib/actions/user.action";
 
 const page = async () => {
   const { userId } = auth();
 
   if (!userId) redirect("/sign-in");
 
-  const user = await getUserById({ userId });
-  console.log(user);
+  // const user = await getUserById({ userId });
 
   return (
     <>
