@@ -58,13 +58,12 @@ export async function POST(req: Request) {
   // create user if event is user.created
   if (eventType === "user.created") {
     const { id, email_addresses, first_name, last_name } = evt.data;
-
     // Create the user in the Database
     const clerkUser = await createUser({
       clerkId: id,
       email: email_addresses[0].email_address,
       firstName: first_name,
-      lastName: last_name,
+      lastName: last_name.length > 0 ? last_name : "",
     });
 
     return NextResponse.json({ message: "OK", user: clerkUser });
@@ -76,7 +75,7 @@ export async function POST(req: Request) {
       updateData: {
         email: email_addresses[0].email_address,
         firstName: first_name,
-        lastName: last_name,
+        lastName: last_name.length > 0 ? last_name : "",
       },
       path: `/profile/${id}`,
     });
