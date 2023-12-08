@@ -55,6 +55,12 @@ Before you begin, make sure you have the following installed on your machine:
    CLERK_SECRET_KEY=your_secret_key
    ```
 
+3. Go to WebHooks, and add your domain.
+   - Set your WebHook secret API key in .env:
+   ```bash
+   WEBHOOK_SECRET=your_webhook_secret
+   ```
+
 ## Running the Application
 
 Run the development server:
