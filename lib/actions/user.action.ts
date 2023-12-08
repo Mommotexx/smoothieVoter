@@ -7,7 +7,6 @@ import {
   DeleteUserParams,
   UpdateUserParams,
 } from "./shared.types";
-
 export async function getUserById(params: any) {
   const { userId } = params;
   try {
