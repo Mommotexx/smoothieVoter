@@ -1,4 +1,6 @@
 # [Live Demo](https://smoothie-voter-mewb-mommotexx.vercel.app/)
+username: demo
+password: demo
 
 # Project Setup Guide
 
